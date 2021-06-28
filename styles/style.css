@@ -1,0 +1,10 @@
+
+.box {
+  border: 1px rgb(0,0,0) solid;
+  display: flex;
+}
+
+.selected {
+  background-color: #f00;
+}
+
