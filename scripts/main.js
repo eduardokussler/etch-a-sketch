@@ -1,14 +1,16 @@
-const gridSize = 32;
+let gridSize = 32;
+const sketchboard = document.querySelector('#sketchboard');
 const body = document.querySelector('body');
 let erase = false;
 
-body.style.display = 'grid';
-body.style.width = '90vw';
-body.style.height = '90vh';
-body.style.gridTemplateColumns = `repeat(${gridSize}, 1fr`;
-body.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
+sketchboard.style.display = 'grid';
+sketchboard.style.width = '100vw';
+sketchboard.style.height = '100vh';
+sketchboard.style.margin = 0;
+sketchboard.style.gridTemplateColumns = `repeat(${gridSize}, 1fr`;
+sketchboard.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
 
-body.addEventListener('click', () => {
+sketchboard.addEventListener('click', () => {
   erase = !erase;
 });
 
@@ -30,10 +32,10 @@ function createDivs() {
   return divs;
 }
 
-function appendToBody(divGrid) {
+function appendToSketchboard(divGrid) {
   for(let i = 0; i < divGrid.length; i++) {
     for(let j = 0; j < divGrid[0].length; j++) {
-      body.appendChild(divGrid[i][j]);
+      sketchboard.appendChild(divGrid[i][j]);
     }
   }
 }
@@ -70,13 +72,45 @@ function addClickEventListener(divs) {
   }
 }
 
+function removeSelected(divs) {
+  for(let i = 0; i < divs.length; i++) {
+    for(let j = 0; j < divs[0].length; j++) {
+      divs[i][j].classList.remove('selected');
+    }
+  }
+}
+
+function changeSize() {
+  let newSize = Number.parseInt(prompt('Size: '));
+  if(newSize < 16 || newSize === NaN) {
+    newSize = 16;
+  }
+  if(newSize > 150) {
+    newSize = 150;
+  }
+  gridSize = newSize;
+  resetSketchBoard();
+}
+
+function removeCurrentDivs() {
+  while(sketchboard.firstChild) {
+    sketchboard.removeChild(sketchboard.lastChild);
+  }
+}
+
+function resetSketchBoard() {
+  let divs = createDivs();
+  removeCurrentDivs();
+  alterClassDivs(divs, 'box')
+  removeSelected(divs);
+  appendToSketchboard(divs);
+  addClickEventListener(divs);
+  addOnHoverEventListener(divs);
+}
 
 
-let divs = createDivs();
-alterClassDivs(divs, 'box')
-appendToBody(divs);
-addClickEventListener(divs);
-addOnHoverEventListener(divs);
 let button = document.createElement('button');
 button.innerText = 'Change gridsize';
+button.onclick = changeSize;
 body.appendChild(button);
+resetSketchBoard(32);

@@ -1,4 +1,7 @@
-
+body {
+  display: flex;
+  margin: 0;
+}
 .box {
   border: 1px rgb(0,0,0) solid;
   display: flex;
@@ -6,5 +9,9 @@
 
 .selected {
   background-color: #f00;
+}
+
+button {
+  align-self: flex-start;
 }
 
